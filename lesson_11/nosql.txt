@@ -1,0 +1,124 @@
+-- В базе данных Redis подберите коллекцию для подсчета посещений с определенных IP-адресов.
+redis 127.0.0.1:6379> SET '127.0.0.1' 1
+OK
+redis 127.0.0.1:6379> GET '127.0.0.1'
+"1"
+redis 127.0.0.1:6379> INCR '127.0.0.1'
+(integer) 2
+redis 127.0.0.1:6379> GET '127.0.0.1'
+"2"
+
+-- решение через множетсва
+
+redis 127.0.0.1:6379> DEL '127.0.0.1'
+(integer) 1
+redis 127.0.0.1:6379> SADD '127.0.0.1' '08-07-2020, 18:05'
+(integer) 1
+redis 127.0.0.1:6379> SMEMBERS '127.0.0.1'
+1) "08-07-2020, 18:05"
+redis 127.0.0.1:6379> SADD '127.0.0.1' '08-07-2020, 18:06'
+(integer) 1
+redis 127.0.0.1:6379> SADD '127.0.0.1' '08-07-2020, 18:07'
+(integer) 1
+redis 127.0.0.1:6379> SADD '127.0.0.1' '08-07-2020, 18:08'
+(integer) 1
+redis 127.0.0.1:6379> SMEMBERS '127.0.0.1'
+1) "08-07-2020, 18:07"
+2) "08-07-2020, 18:08"
+3) "08-07-2020, 18:05"
+4) "08-07-2020, 18:06"
+redis 127.0.0.1:6379> SCARD '127.0.0.1'
+(integer) 4
+
+-- При помощи базы данных Redis решите задачу поиска имени пользователя по электронному адресу и наоборот,
+-- поиск электронного адреса пользователя по его имени.
+
+redis 127.0.0.1:6379> SET 'ivanov ivan' 'ivan.ivanov@gmail.com'
+OK
+redis 127.0.0.1:6379> SET 'ivanov.ivan@gmail.com' 'ivan ivanov'
+OK
+-- поиска электронного адреса по имени пользователя
+redis 127.0.0.1:6379> GET 'ivanov ivan'
+"ivan.ivanov@gmail.com"
+-- поиска имени пользователя по электронному адресу
+redis 127.0.0.1:6379> GET 'ivanov.ivan@gmail.com'
+"ivan ivanov"
+
+
+-- Организуйте хранение категорий и товарных позиций учебной базы данных shop в СУБД MongoDB.
+> db.shop.catalogs.count()
+0
+> db.shop.catalogs.insert({name: 'Processors'})
+WriteResult({ "nInserted" : 1 })
+> db.shop.catalogs.find()
+{ "_id" : ObjectId("5f07143c688ece70f43a27e7"), "name" : "Processors" }
+> db.shop.catalogs.insert({name: 'Motherboards'})
+WriteResult({ "nInserted" : 1 })
+> db.shop.catalogs.insert({name: 'Videocards'})
+WriteResult({ "nInserted" : 1 })
+> db.shop.catalogs.insert({name: 'Harddrives'})
+WriteResult({ "nInserted" : 1 })
+> db.shop.catalogs.insert({name: 'RAM'})
+WriteResult({ "nInserted" : 1 })
+> db.shop.catalogs.insert({name: 'Supercomputers'})
+WriteResult({ "nInserted" : 1 })
+> db.shop.catalogs.find()
+{ "_id" : ObjectId("5f07143c688ece70f43a27e7"), "name" : "Processors" }
+{ "_id" : ObjectId("5f071579688ece70f43a27e8"), "name" : "Motherboards" }
+{ "_id" : ObjectId("5f071583688ece70f43a27e9"), "name" : "Videocards" }
+{ "_id" : ObjectId("5f07158c688ece70f43a27ea"), "name" : "Harddrives" }
+{ "_id" : ObjectId("5f071594688ece70f43a27eb"), "name" : "RAM" }
+{ "_id" : ObjectId("5f07159e688ece70f43a27ec"), "name" : "Supercomputers" }
+> db.shop.products.find()
+> db.shop.products.count()
+0
+> db.shop.products.insert({
+... "name" : "Intel Core i3-8100",
+... "description" : "The processor for desktop personal computers based on the Intel platform.",
+... "price" : 7890.00,
+... "catalog_id" : "5f07143c688ece70f43a27e7",
+... "created_at" : "2020-06-25 16:19:41",
+... "updated_at" : "2020-06-25 16:19:41"})
+WriteResult({ "nInserted" : 1 })
+> db.shop.products.insert({
+... "name" : "Intel Core i5-7400",
+... "description" : "The processor for desktop personal computers based on the Intel platform.",
+... "price" : 12700.00,
+... "catalog_id" : "5f07143c688ece70f43a27e7",
+... "created_at" : "2020-06-25 16:19:41",
+... "updated_at" : "2020-06-25 16:19:41"})
+WriteResult({ "nInserted" : 1 })
+> db.shop.products.insert({
+... "name" : "AMD FX-8320E",
+... "description" : "The processor for desktop personal computers based on the AMD platform.",
+... "price" : 4780.00,
+... "catalog_id" : "5f07143c688ece70f43a27e7",
+... "created_at" : "2020-06-25 16:19:41",
+... "updated_at" : "2020-06-25 16:19:41"
+... })
+WriteResult({ "nInserted" : 1 })
+> db.shop.products.insert({
+... "name" : "AMD FX-8320",
+... "description" : "The processor for desktop personal computers based on the AMD platform.",
+... "price" : 7120.00,
+... "catalog_id" : "5f07143c688ece70f43a27e7",
+... "created_at" : "2020-06-25 16:19:41",
+... "updated_at" : "2020-06-25 16:19:41"
+... })
+WriteResult({ "nInserted" : 1 })
+> db.shop.products.insert({
+... "name" : "ASUS ROG MAXIMUS X HERO",
+... "description" : "Motherboard ASUS ROG MAXIMUS X HERO, Z370, Socket 1151-V2, DDR4, ATX",
+... "price" : 19310.00,
+... "catalog_id" : "5f071579688ece70f43a27e8",
+... "created_at" : "2020-06-25 16:19:41",
+... "updated_at" : "2020-06-25 16:19:41"
+... })
+WriteResult({ "nInserted" : 1 })
+> db.shop.products.find()
+{ "_id" : ObjectId("5f071ce9688ece70f43a27ed"), "name" : "Intel Core i3-8100", "description" : "The processor for desktop personal computers based on the Intel platform.", "price" : 7890, "catalog_id" : "5f07143c688ece70f43a27e7", "created_at" : "2020-06-25 16:19:41", "updated_at" : "2020-06-25 16:19:41" }
+{ "_id" : ObjectId("5f071d21688ece70f43a27ee"), "name" : "Intel Core i5-7400", "description" : "The processor for desktop personal computers based on the Intel platform.", "price" : 12700, "catalog_id" : "5f07143c688ece70f43a27e7", "created_at" : "2020-06-25 16:19:41", "updated_at" : "2020-06-25 16:19:41" }
+{ "_id" : ObjectId("5f071d35688ece70f43a27ef"), "name" : "AMD FX-8320E", "description" : "The processor for desktop personal computers based on the AMD platform.", "price" : 4780, "catalog_id" : "5f07143c688ece70f43a27e7", "created_at" : "2020-06-25 16:19:41", "updated_at" : "2020-06-25 16:19:41" }
+{ "_id" : ObjectId("5f071d54688ece70f43a27f0"), "name" : "AMD FX-8320", "description" : "The processor for desktop personal computers based on the AMD platform.", "price" : 7120, "catalog_id" : "5f07143c688ece70f43a27e7", "created_at" : "2020-06-25 16:19:41", "updated_at" : "2020-06-25 16:19:41" }
+{ "_id" : ObjectId("5f071d76688ece70f43a27f1"), "name" : "ASUS ROG MAXIMUS X HERO", "description" : "Motherboard ASUS ROG MAXIMUS X HERO, Z370, Socket 1151-V2, DDR4, ATX", "price" : 19310, "catalog_id" : "5f071579688ece70f43a27e8", "created_at" : "2020-06-25 16:19:41", "updated_at" : "2020-06-25 16:19:41" }
+>
